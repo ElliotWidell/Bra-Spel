@@ -14,10 +14,12 @@ namespace grafik
             float X = 0;
             float Y = 0;
             float score = 0;
-            float astroidsOnScreen = 0;
-            float shotX = 0;
-            float shotY = 0;
             Random randomAstroid = new Random();
+
+            List<Rectangle> shots = new List<Rectangle>();
+            List<Rectangle> astroid = new List<Rectangle>();
+
+            Raylib.SetTargetFPS(60);
 
 
 
@@ -51,22 +53,21 @@ namespace grafik
                 if (gamestate == "ingame")
                 {
                     Raylib.BeginDrawing();
-                    Raylib.DrawText(gamestate, 0, 0, 120, Color.DARKBLUE);
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
                     {
-                        X += 0.3f;
+                        X += 5f;
                     }
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_A))  //controlls 
                     {
-                        X -= 0.3f;
+                        X -= 5f;
                     }
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
                     {
-                        Y -= 0.3f;
+                        Y -= 5f;
                     }
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
                     {
-                        Y += 0.3f;
+                        Y += 5f;
                     }
 
 
@@ -75,37 +76,63 @@ namespace grafik
 
                     Raylib.ClearBackground(Color.LIGHTGRAY);
 
-                    if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
-                    {
-                        shotX = X;
-                        shotY = Y;
-
-
-                        while (shotY > 0)
-                        {
-                            shotY -= 0.3f;
-                            Raylib.DrawRectangle((int)shotX, (int)shotY, 20, 40, Color.PURPLE);
 
 
 
-                        }
-
-                        List<string> Astroids = new List<string>() { "bigAstroid", "mediumAstroid", "smallAstroid" };
-
-
-                        Circle bigAstroidmold = new Circle
-                    }
-                    if (astroidsOnScreen < 15)
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                     {
 
 
+                        shots.Add(new Rectangle(X, Y, 20, 40));
+
 
                     }
+
+                    for (int i = 0; i < shots.Count; i++)        // Det som skapar skotten 
+                    {
+                        Rectangle shot = shots[i];
+                        shot.y -= 9;
+                        shots[i] = shot;
+
+                        Raylib.DrawRectangleRec(shot, Color.RED);
+                    }
+
+                    shots.RemoveAll(shot => shot.y < 0);
+
+
+
+
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                    {
+
+
+                        astroid.Add(new Rectangle(X, Y, 20, 40));
+
+
+                    }
+
+
+
+                    for (int i = 0; i < astroid.Count; i++)
+                    {
+                        Rectangle astroid = astroids[i];
+                        astroid.y -= 9;
+                        astroids[i] = astroid;
+
+                        Raylib.DrawRectangleRec(astroid, Color.RED);
+                    }
+
+
+
+
+
+
+
                     Raylib.DrawRectangle((int)X, (int)Y, 50, 70, Color.GREEN);
                     Raylib.DrawRectangle((int)X + 35, (int)Y + 50, 20, 25, Color.RED);
                     Raylib.DrawRectangle((int)X - 7, (int)Y + 50, 20, 25, Color.RED);  //Ritar ut spelaren
                     Raylib.DrawRectangle((int)X + 15, (int)Y + 10, 20, 25, Color.BLUE);
-                    score = score + 0.01f;
+                    score = score + 100f;
                     Raylib.DrawText("Score: " + score, 20, 20, 40, Color.PINK);
 
                     if (life <= 0)
