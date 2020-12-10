@@ -13,11 +13,12 @@ namespace grafik
             float life = 3;
             float X = 600;
             float Y = 500;
-            float score = 0;
+            int score = 0;
             Random randomAstroid = new Random();
             Random astroidPos = new Random();
-
-
+            int difficulty = 100;
+            string difficultyText = "Easy";
+            bool playerAstroidCol = false;
 
             List<Rectangle> shots = new List<Rectangle>();
             List<Rectangle> astroid = new List<Rectangle>();
@@ -80,9 +81,33 @@ namespace grafik
                     Raylib.ClearBackground(Color.BLACK);
 
 
+
+                    if (score > 10000 && score < 30000)
+                    {
+                        difficultyText = "Medium";
+                        difficulty = 50;
+
+                    }
+
+
+                    if (score > 30001 && score < 50000)
+                    {
+                        difficultyText = "Hard";
+                        difficulty = 25;
+
+                    }
+
+                    if (score > 50001 && score < 70000)
+                    {
+                        difficultyText = "DeathWish";
+                        difficulty = 15;
+
+                    }
+
+
                     int aXPos = astroidPos.Next(1200);
 
-                    int r = randomAstroid.Next(100);
+                    int r = randomAstroid.Next(difficulty);
                     if (r == 1)
                     {
                         astroid.Add(new Rectangle(aXPos, 0, 50, 50));
@@ -122,9 +147,19 @@ namespace grafik
 
                         Raylib.DrawRectangleRec(a, Color.GRAY);
                     }
+                    foreach (Rectangle shot in shots)
+                    {
+                        astroid.RemoveAll(a => Raylib.CheckCollisionRecs(a, shot));
+                    }
+                    foreach (Rectangle a in astroid)
+                    {
+                        playerAstroidCol = Raylib.CheckCollisionRecs(X, a);
+                    }
 
-
-
+                    if (playerAstroidCol == true)
+                    {
+                        life = life - 1;
+                    }
 
 
 
@@ -142,8 +177,33 @@ namespace grafik
                     Raylib.DrawRectangle((int)X + 15, (int)Y + 10, 20, 25, Color.BLUE);
                     Raylib.DrawRectangle((int)X - 4, (int)Y + 74, 15, 12, Color.ORANGE);
                     Raylib.DrawRectangle((int)X + 38, (int)Y + 74, 15, 12, Color.ORANGE);
-                    score = score + 100f;
+                    score = score + 10;
                     Raylib.DrawText("Score: " + score, 20, 20, 40, Color.PINK);
+                    Raylib.DrawText("Difficulty: " + difficultyText, 750, 20, 40, Color.PINK);
+
+                    Raylib.DrawText("Life: ", 900, 700, 45, Color.PINK);
+
+                    if (life == 3)
+                    {
+                        Raylib.DrawRectangle(1000, 700, 35, 45, Color.RED);
+                        Raylib.DrawRectangle(1050, 700, 35, 45, Color.RED);
+                        Raylib.DrawRectangle(1100, 700, 35, 45, Color.RED);
+
+                    }
+                    if (life == 2)
+                    {
+                        Raylib.DrawRectangle(1000, 700, 35, 45, Color.RED);
+                        Raylib.DrawRectangle(1050, 700, 35, 45, Color.RED);
+                        Raylib.DrawRectangle(1100, 700, 35, 45, Color.GRAY);
+
+                    }
+                    if (life == 1)
+                    {
+                        Raylib.DrawRectangle(1000, 700, 35, 45, Color.RED);
+                        Raylib.DrawRectangle(1050, 700, 35, 45, Color.GRAY);
+                        Raylib.DrawRectangle(1100, 700, 35, 45, Color.GRAY);
+
+                    }
 
                     if (life <= 0)
                     {
@@ -179,3 +239,4 @@ namespace grafik
         }
     }
 }
+
