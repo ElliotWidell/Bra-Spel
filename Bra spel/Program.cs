@@ -51,10 +51,8 @@ namespace grafik
                     Raylib.EndDrawing();
                 }
 
-                else
 
-
-                if (gamestate == "ingame")
+                else if (gamestate == "ingame")
                 {
                     Raylib.BeginDrawing();
                     if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
@@ -73,6 +71,7 @@ namespace grafik
                     {
                         Y += 6f;
                     }
+
 
 
 
@@ -151,15 +150,19 @@ namespace grafik
                     {
                         astroid.RemoveAll(a => Raylib.CheckCollisionRecs(a, shot));
                     }
-                    foreach (Rectangle a in astroid)
-                    {
-                        playerAstroidCol = Raylib.CheckCollisionRecs(X, a);
-                    }
+                    //         foreach (Rectangle a in astroid)
+                    //         {
+                    //             //playerAstroidCol = Raylib.CheckCollisionRecs(X, a);
+                    //         }                                           }                                           }                                           }
+                    //     }
+                    // }
 
-                    if (playerAstroidCol == true)
-                    {
-                        life = life - 1;
-                    }
+
+
+                    // if (playerAstroidCol == true)
+                    // {
+                    //     life = life - 1;
+                    // }
 
 
 
@@ -181,7 +184,6 @@ namespace grafik
                     Raylib.DrawText("Score: " + score, 20, 20, 40, Color.PINK);
                     Raylib.DrawText("Difficulty: " + difficultyText, 750, 20, 40, Color.PINK);
 
-                    Raylib.DrawText("Life: ", 900, 700, 45, Color.PINK);
 
                     if (life == 3)
                     {
@@ -222,21 +224,25 @@ namespace grafik
                     }
                     Raylib.EndDrawing();
 
+
                 }
-                else
-                if (gamestate == "gameover")
+
+                else if (gamestate == "gameover")
                 {
                     Raylib.BeginDrawing();
                     Raylib.ClearBackground(Color.GRAY);
                     Raylib.DrawText("Game Over", 300, 150, 120, Color.DARKBLUE);
                     Raylib.DrawText("Your Score: " + score, 230, 350, 100, Color.DARKBLUE);   //game over skärmen
                     Raylib.EndDrawing();
-
                 }
-
-
             }
+
         }
+
+
     }
 }
+
+
+
 
