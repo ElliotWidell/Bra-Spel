@@ -18,10 +18,10 @@ namespace grafik
             Random astroidPos = new Random();
             int difficulty = 100;
             string difficultyText = "Easy";
-            bool playerAstroidCol = false;
 
             List<Rectangle> shots = new List<Rectangle>();
             List<Rectangle> astroid = new List<Rectangle>();
+
 
             Raylib.SetTargetFPS(60);
 
@@ -38,7 +38,7 @@ namespace grafik
 
                     Raylib.ClearBackground(Color.LIGHTGRAY);
                     Raylib.DrawText("Bra spel", 350, 150, 120, Color.DARKBLUE);  // Menu
-                    Raylib.DrawText(gamestate, 200, 10, 120, Color.DARKBLUE);
+
 
                     Raylib.DrawText("Press Space to play", 300, 650, 60, Color.DARKBLUE);
 
@@ -137,6 +137,10 @@ namespace grafik
 
 
 
+                    Rectangle playerRec = new Rectangle((int)X, (int)Y, 50, 70);
+
+
+
 
                     for (int i = 0; i < astroid.Count; i++)
                     {
@@ -150,19 +154,15 @@ namespace grafik
                     {
                         astroid.RemoveAll(a => Raylib.CheckCollisionRecs(a, shot));
                     }
-                    //         foreach (Rectangle a in astroid)
-                    //         {
-                    //             //playerAstroidCol = Raylib.CheckCollisionRecs(X, a);
-                    //         }                                           }                                           }                                           }
-                    //     }
-                    // }
+
+                    foreach (Rectangle rect in astroid)
+
+                        if (Raylib.CheckCollisionRecs(playerRec, rect))
+
+                            life--;
 
 
-
-                    // if (playerAstroidCol == true)
-                    // {
-                    //     life = life - 1;
-                    // }
+                    astroid.RemoveAll(a => Raylib.CheckCollisionRecs(a, playerRec));
 
 
 
@@ -174,7 +174,8 @@ namespace grafik
 
 
 
-                    Raylib.DrawRectangle((int)X, (int)Y, 50, 70, Color.LIGHTGRAY);
+
+                    Raylib.DrawRectangleRec(playerRec, Color.LIGHTGRAY);
                     Raylib.DrawRectangle((int)X + 35, (int)Y + 50, 20, 25, Color.LIGHTGRAY);
                     Raylib.DrawRectangle((int)X - 7, (int)Y + 50, 20, 25, Color.LIGHTGRAY);  //Ritar ut spelaren
                     Raylib.DrawRectangle((int)X + 15, (int)Y + 10, 20, 25, Color.BLUE);
