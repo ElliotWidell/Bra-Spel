@@ -18,6 +18,10 @@ namespace grafik
             Random astroidPos = new Random();
             int difficulty = 100;
             string difficultyText = "Easy";
+            float shotTimer = 0;
+            float shotTimerMax = 0.5f;
+            float outTimerMax = 3;
+            float outTimer = 0;
 
             List<Rectangle> shots = new List<Rectangle>();
             List<Rectangle> astroid = new List<Rectangle>();
@@ -78,6 +82,17 @@ namespace grafik
 
 
                     Raylib.ClearBackground(Color.BLACK);
+                    Raylib.DrawRectangle(20, 400, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(200, 100, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(550, 230, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(1050, 600, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(800, 150, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(90, 650, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(450, 710, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(810, 550, 20, 20, Color.YELLOW);
+                    Raylib.DrawRectangle(250, 400, 20, 20, Color.YELLOW);
+
+                    Raylib.DrawText("Health", 1000, 650, 40, Color.WHITE);
 
 
 
@@ -98,8 +113,15 @@ namespace grafik
 
                     if (score > 50001 && score < 70000)
                     {
-                        difficultyText = "DeathWish";
+                        difficultyText = "OverKill";        //de olika svårighets graderna som går upp med hur högt score man har
                         difficulty = 15;
+
+                        }
+
+                    if (score > 70001)
+                    {
+                        difficultyText = "DeathWish";
+                        difficulty = 2;
 
                     }
 
@@ -112,10 +134,22 @@ namespace grafik
                         astroid.Add(new Rectangle(aXPos, 0, 50, 50));
                     }
 
-
-                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                    if (X >= 1200 || Y >= 800 || 0 >= X || 0 >= Y)
                     {
+                        outTimer += Raylib.GetFrameTime();
+                        Raylib.DrawText("Get Back Or You Will Die!", 260, 300, 60, Color.RED);
 
+                    }
+
+                    if (outTimer >= outTimerMax)
+                    {
+                        life = 0;        //det som gör att man dör om man är utanför skärmen för länge
+                    }
+
+                    shotTimer += Raylib.GetFrameTime();
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && shotTimer > shotTimerMax)
+                    {
+                        shotTimer = 0;
 
                         shots.Add(new Rectangle(X + 15, Y, 20, 40));
 
@@ -124,7 +158,7 @@ namespace grafik
 
                     for (int i = 0; i < shots.Count; i++)        // Det som skapar skotten 
                     {
-                        Rectangle shot = shots[i];
+                        Rectangle shot = shots[i];      // Det som flyttar skotten
                         shot.y -= 9;
                         shots[i] = shot;
 
@@ -155,9 +189,10 @@ namespace grafik
                         astroid.RemoveAll(a => Raylib.CheckCollisionRecs(a, shot));
                     }
 
+
                     foreach (Rectangle rect in astroid)
 
-                        if (Raylib.CheckCollisionRecs(playerRec, rect))
+                        if (Raylib.CheckCollisionRecs(playerRec, rect))  // Kollar om spelaren åker in i en astroid
 
                             life--;
 
@@ -233,7 +268,15 @@ namespace grafik
                     Raylib.BeginDrawing();
                     Raylib.ClearBackground(Color.GRAY);
                     Raylib.DrawText("Game Over", 300, 150, 120, Color.DARKBLUE);
-                    Raylib.DrawText("Your Score: " + score, 230, 350, 100, Color.DARKBLUE);   //game over skärmen
+                    Raylib.DrawText("Your Score: ", 270, 300, 100, Color.DARKBLUE);   //game over skärmen
+                    Raylib.DrawText(" " + score, 270, 400, 200, Color.RED);
+                    Raylib.DrawText("Press Space For Main Menu", 170, 650, 50, Color.RED);
+                    if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                    {
+
+                        gamestate = "menu";
+
+                    }
                     Raylib.EndDrawing();
                 }
             }
